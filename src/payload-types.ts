@@ -72,8 +72,13 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    roles: Role;
+    initiatives: Initiative;
     members: Member;
     meetings: Meeting;
+    ninjas: Ninja;
+    mentors: Mentor;
+    'festival-editions': FestivalEdition;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -96,8 +101,13 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    roles: RolesSelect<false> | RolesSelect<true>;
+    initiatives: InitiativesSelect<false> | InitiativesSelect<true>;
     members: MembersSelect<false> | MembersSelect<true>;
     meetings: MeetingsSelect<false> | MeetingsSelect<true>;
+    ninjas: NinjasSelect<false> | NinjasSelect<true>;
+    mentors: MentorsSelect<false> | MentorsSelect<true>;
+    'festival-editions': FestivalEditionsSelect<false> | FestivalEditionsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -784,6 +794,43 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "roles".
+ */
+export interface Role {
+  id: number;
+  name: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "initiatives".
+ */
+export interface Initiative {
+  id: number;
+  title: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  image?: (number | null) | Media;
+  siteLink?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "members".
  */
 export interface Member {
@@ -810,6 +857,77 @@ export interface Meeting {
   workshopTopic?: ('Demo your stack' | 'F*ck-up nights' | 'Meet the business') | null;
   presenter?: (number | null) | Member;
   discussionAgenda?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ninjas".
+ */
+export interface Ninja {
+  id: number;
+  childName?: string | null;
+  age?: number | null;
+  usefulInfo?: string | null;
+  guardianName?: string | null;
+  guardianEmail?: string | null;
+  guardianPhone?: string | null;
+  safetyAgreement: boolean;
+  photoReleaseAgreement: boolean;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mentors".
+ */
+export interface Mentor {
+  id: number;
+  name: string;
+  bio?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  photo?: (number | null) | Media;
+  userAccount?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "festival-editions".
+ */
+export interface FestivalEdition {
+  id: number;
+  year: number;
+  title: string;
+  theme?: string | null;
+  description?: {
     root: {
       type: string;
       children: {
@@ -1038,12 +1156,32 @@ export interface PayloadLockedDocument {
         value: number | User;
       } | null)
     | ({
+        relationTo: 'roles';
+        value: number | Role;
+      } | null)
+    | ({
+        relationTo: 'initiatives';
+        value: number | Initiative;
+      } | null)
+    | ({
         relationTo: 'members';
         value: number | Member;
       } | null)
     | ({
         relationTo: 'meetings';
         value: number | Meeting;
+      } | null)
+    | ({
+        relationTo: 'ninjas';
+        value: number | Ninja;
+      } | null)
+    | ({
+        relationTo: 'mentors';
+        value: number | Mentor;
+      } | null)
+    | ({
+        relationTo: 'festival-editions';
+        value: number | FestivalEdition;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1412,6 +1550,27 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "roles_select".
+ */
+export interface RolesSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "initiatives_select".
+ */
+export interface InitiativesSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  image?: T;
+  siteLink?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "members_select".
  */
 export interface MembersSelect<T extends boolean = true> {
@@ -1436,6 +1595,46 @@ export interface MeetingsSelect<T extends boolean = true> {
   workshopTopic?: T;
   presenter?: T;
   discussionAgenda?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ninjas_select".
+ */
+export interface NinjasSelect<T extends boolean = true> {
+  childName?: T;
+  age?: T;
+  usefulInfo?: T;
+  guardianName?: T;
+  guardianEmail?: T;
+  guardianPhone?: T;
+  safetyAgreement?: T;
+  photoReleaseAgreement?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mentors_select".
+ */
+export interface MentorsSelect<T extends boolean = true> {
+  name?: T;
+  bio?: T;
+  photo?: T;
+  userAccount?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "festival-editions_select".
+ */
+export interface FestivalEditionsSelect<T extends boolean = true> {
+  year?: T;
+  title?: T;
+  theme?: T;
+  description?: T;
   updatedAt?: T;
   createdAt?: T;
 }

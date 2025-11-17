@@ -25,6 +25,7 @@ import { Mentors } from './collections/Mentors'
 import { FestivalEditions } from './collections/FestivalEditions'
 import { FestivalSections } from './collections/FestivalSelections'
 import { Locations } from './collections/Locations'
+import { Guests } from './collections/Guests'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -87,7 +88,8 @@ export default buildConfig({
     Mentors,
     FestivalEditions,
     FestivalSections,
-    Locations
+    Locations,
+    Guests
   ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],

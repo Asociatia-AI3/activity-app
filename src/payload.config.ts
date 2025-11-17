@@ -21,6 +21,8 @@ import { getServerSideURL } from './utilities/getURL'
 import { Roles } from './collections/Roles'
 import { Initiatives } from './collections/Initiatives'
 import { Ninjas } from './collections/Ninjas'
+import { Mentors } from './collections/Mentors'
+import { FestivalEditions } from './collections/FestivalEditions'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -79,7 +81,9 @@ export default buildConfig({
     Initiatives, 
     Members, 
     Meetings,
-    Ninjas
+    Ninjas,
+    Mentors,
+    FestivalEditions
   ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],

@@ -24,6 +24,7 @@ import { Ninjas } from './collections/Ninjas'
 import { Mentors } from './collections/Mentors'
 import { FestivalEditions } from './collections/FestivalEditions'
 import { FestivalSections } from './collections/FestivalSelections'
+import { Locations } from './collections/Locations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -85,7 +86,8 @@ export default buildConfig({
     Ninjas,
     Mentors,
     FestivalEditions,
-    FestivalSections
+    FestivalSections,
+    Locations
   ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],

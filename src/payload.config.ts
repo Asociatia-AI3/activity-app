@@ -20,6 +20,7 @@ import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import { Roles } from './collections/Roles'
 import { Initiatives } from './collections/Initiatives'
+import { Ninjas } from './collections/Ninjas'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -68,7 +69,18 @@ export default buildConfig({
       url: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users, Roles, Initiatives, Members, Meetings],
+  collections: [
+    Pages, 
+    Posts, 
+    Media, 
+    Categories, 
+    Users, 
+    Roles, 
+    Initiatives, 
+    Members, 
+    Meetings,
+    Ninjas
+  ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [

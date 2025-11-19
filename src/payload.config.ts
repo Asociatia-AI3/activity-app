@@ -27,6 +27,7 @@ import { FestivalSections } from './collections/FestivalSelections'
 import { Locations } from './collections/Locations'
 import { Guests } from './collections/Guests'
 import { Volunteers } from './collections/Volunteers'
+import { Activities } from './collections/Activities'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -91,7 +92,8 @@ export default buildConfig({
     FestivalSections,
     Locations,
     Guests,
-    Volunteers
+    Volunteers,
+    Activities,
   ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],

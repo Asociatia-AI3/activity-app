@@ -17,6 +17,7 @@ export const Meetings: CollectionConfig = {
       name: 'presenter',
       type: 'relationship',
       relationTo: 'members',
+      hasMany: false,
       admin: { condition: (data) => data.type === 'workshop' },
     },
     {

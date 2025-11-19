@@ -3,7 +3,7 @@ import { CollectionConfig } from 'payload'
 export const Guests: CollectionConfig = {
   slug: 'guests',
   fields: [
-    { name: 'edition', type: 'relationship', relationTo: 'festival-editions' },
+    { name: 'edition', type: 'relationship', relationTo: 'festival-editions', hasMany: false },
     { name: 'name', type: 'text' },
     { name: 'organization', type: 'text' },
     {
@@ -17,7 +17,7 @@ export const Guests: CollectionConfig = {
       ],
     },
     { name: 'bio', type: 'richText' },
-    { name: 'photo', type: 'upload', relationTo: 'media' },
+    { name: 'photo', type: 'upload', relationTo: 'media', hasMany: false },
     {
       name: 'website',
       type: 'text',

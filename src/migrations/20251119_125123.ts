@@ -601,6 +601,20 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.run(sql`CREATE INDEX \`users_updated_at_idx\` ON \`users\` (\`updated_at\`);`)
   await db.run(sql`CREATE INDEX \`users_created_at_idx\` ON \`users\` (\`created_at\`);`)
   await db.run(sql`CREATE UNIQUE INDEX \`users_email_idx\` ON \`users\` (\`email\`);`)
+  await db.run(sql`CREATE TABLE \`users_rels\` (
+  	\`id\` integer PRIMARY KEY NOT NULL,
+  	\`order\` integer,
+  	\`parent_id\` integer NOT NULL,
+  	\`path\` text NOT NULL,
+  	\`roles_id\` integer,
+  	FOREIGN KEY (\`parent_id\`) REFERENCES \`users\`(\`id\`) ON UPDATE no action ON DELETE cascade,
+  	FOREIGN KEY (\`roles_id\`) REFERENCES \`roles\`(\`id\`) ON UPDATE no action ON DELETE cascade
+  );
+  `)
+  await db.run(sql`CREATE INDEX \`users_rels_order_idx\` ON \`users_rels\` (\`order\`);`)
+  await db.run(sql`CREATE INDEX \`users_rels_parent_idx\` ON \`users_rels\` (\`parent_id\`);`)
+  await db.run(sql`CREATE INDEX \`users_rels_path_idx\` ON \`users_rels\` (\`path\`);`)
+  await db.run(sql`CREATE INDEX \`users_rels_roles_id_idx\` ON \`users_rels\` (\`roles_id\`);`)
   await db.run(sql`CREATE TABLE \`roles\` (
   	\`id\` integer PRIMARY KEY NOT NULL,
   	\`name\` text NOT NULL,
@@ -1453,6 +1467,7 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   await db.run(sql`DROP TABLE \`categories\`;`)
   await db.run(sql`DROP TABLE \`users_sessions\`;`)
   await db.run(sql`DROP TABLE \`users\`;`)
+  await db.run(sql`DROP TABLE \`users_rels\`;`)
   await db.run(sql`DROP TABLE \`roles\`;`)
   await db.run(sql`DROP TABLE \`initiatives\`;`)
   await db.run(sql`DROP TABLE \`members\`;`)

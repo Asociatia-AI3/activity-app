@@ -5,7 +5,7 @@ export const Initiatives: CollectionConfig = {
   fields: [
     { name: 'title', type: 'text', required: true },
     { name: 'description', type: 'richText' },
-    { name: 'image', type: 'upload', relationTo: 'media' },
+    { name: 'image', type: 'upload', relationTo: 'media', hasMany: false },
     {
       name: 'siteLink',
       type: 'text',

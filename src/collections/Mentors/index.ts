@@ -5,7 +5,7 @@ export const Mentors: CollectionConfig = {
   fields: [
     { name: 'name', type: 'text', required: true },
     { name: 'bio', type: 'richText' },
-    { name: 'photo', type: 'upload', relationTo: 'media' },
-    { name: 'userAccount', type: 'relationship', relationTo: 'users' },
+    { name: 'photo', type: 'upload', relationTo: 'media', hasMany: false },
+    { name: 'userAccount', type: 'relationship', relationTo: 'users', hasMany: false },
   ],
 }

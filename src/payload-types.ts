@@ -83,6 +83,8 @@ export interface Config {
     locations: Location;
     guests: Guest;
     volunteers: Volunteer;
+    activities: Activity;
+    schedules: Schedule;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -116,6 +118,8 @@ export interface Config {
     locations: LocationsSelect<false> | LocationsSelect<true>;
     guests: GuestsSelect<false> | GuestsSelect<true>;
     volunteers: VolunteersSelect<false> | VolunteersSelect<true>;
+    activities: ActivitiesSelect<false> | ActivitiesSelect<true>;
+    schedules: SchedulesSelect<false> | SchedulesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -1063,6 +1067,55 @@ export interface Guest {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "activities".
+ */
+export interface Activity {
+  id: number;
+  edition?: (number | null) | FestivalEdition;
+  title?: string | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  type?: ('expo' | 'talk' | 'workshop' | 'social' | 'entertainment') | null;
+  audience?:
+    | {
+        audienceType?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  guests?: (number | Guest)[] | null;
+  section?: (number | null) | FestivalSection;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "schedules".
+ */
+export interface Schedule {
+  id: number;
+  edition?: (number | null) | FestivalEdition;
+  startTime?: string | null;
+  endTime?: string | null;
+  activity?: (number | null) | Activity;
+  location?: (number | null) | Location;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1314,6 +1367,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'volunteers';
         value: number | Volunteer;
+      } | null)
+    | ({
+        relationTo: 'activities';
+        value: number | Activity;
+      } | null)
+    | ({
+        relationTo: 'schedules';
+        value: number | Schedule;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1838,6 +1899,39 @@ export interface VolunteersSelect<T extends boolean = true> {
   agreementDocument?: T;
   coordinator?: T;
   userAccount?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "activities_select".
+ */
+export interface ActivitiesSelect<T extends boolean = true> {
+  edition?: T;
+  title?: T;
+  description?: T;
+  type?: T;
+  audience?:
+    | T
+    | {
+        audienceType?: T;
+        id?: T;
+      };
+  guests?: T;
+  section?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "schedules_select".
+ */
+export interface SchedulesSelect<T extends boolean = true> {
+  edition?: T;
+  startTime?: T;
+  endTime?: T;
+  activity?: T;
+  location?: T;
   updatedAt?: T;
   createdAt?: T;
 }

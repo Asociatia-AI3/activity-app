@@ -28,6 +28,7 @@ import { Locations } from './collections/Locations'
 import { Guests } from './collections/Guests'
 import { Volunteers } from './collections/Volunteers'
 import { Activities } from './collections/Activities'
+import { Schedules } from './collections/Schedule'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -94,6 +95,7 @@ export default buildConfig({
     Guests,
     Volunteers,
     Activities,
+    Schedules
   ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],

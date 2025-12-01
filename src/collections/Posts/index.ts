@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, CollectionSlug } from 'payload'
 
 import {
   BlocksFeature,
@@ -128,6 +128,15 @@ export const Posts: CollectionConfig<'posts'> = {
               },
               hasMany: true,
               relationTo: 'categories',
+            },
+            {
+              name: 'initiative',
+              type: 'relationship',
+              admin: {
+                position: 'sidebar',
+              },
+              hasMany: false,
+              relationTo: 'initiatives' as CollectionSlug,
             },
           ],
           label: 'Meta',

@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
+import { Roles } from './collections/Roles'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
@@ -16,6 +17,18 @@ import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import { Members } from './collections/Members'
+import { Initiatives } from './collections/Initiatives'
+import { Ninjas } from './collections/Ninjas'
+import { Mentors } from './collections/Mentors'
+import { Meetings } from './collections/Meetings'
+import { FestivalSections } from './collections/FestivalSections'
+import { FestivalEditions } from './collections/FestivalEditions'
+import { Volunteers } from './collections/Volunteers'
+import { Locations } from './collections/Locations'
+import { Guests } from './collections/Guests'
+import { Activities } from './collections/Activities'
+import { Schedule } from './collections/Schedule'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -64,7 +77,26 @@ export default buildConfig({
       url: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [
+    Pages,
+    Posts,
+    Roles,
+    Media,
+    Categories,
+    Users,
+    Members,
+    Initiatives,
+    Ninjas,
+    Mentors,
+    Meetings,
+    FestivalSections,
+    FestivalEditions,
+    Volunteers,
+    Locations,
+    Guests,
+    Activities,
+    Schedule,
+  ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [

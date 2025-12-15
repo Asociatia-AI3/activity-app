@@ -21,6 +21,15 @@ export const Users: CollectionConfig = {
       name: 'name',
       type: 'text',
     },
+    {
+      name: 'roles',
+      type: 'relationship',
+      relationTo: 'roles',
+      hasMany: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
   ],
   timestamps: true,
 }

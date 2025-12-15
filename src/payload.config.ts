@@ -29,6 +29,8 @@ import { Guests } from './collections/Guests'
 import { Volunteers } from './collections/Volunteers'
 import { Activities } from './collections/Activities'
 import { Schedules } from './collections/Schedule'
+import { en } from '@payloadcms/translations/languages/en'
+import { ro } from '@payloadcms/translations/languages/ro'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -103,6 +105,10 @@ export default buildConfig({
     ...plugins,
     // storage-adapter-placeholder
   ],
+  i18n: {
+    fallbackLanguage: 'en',
+    supportedLanguages: { en, ro },
+  },
   secret: process.env.PAYLOAD_SECRET,
   sharp,
   typescript: {

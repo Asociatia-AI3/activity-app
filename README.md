@@ -26,7 +26,7 @@ Pentru a genera migrația corectă, trebuie să modelați următoarele entităț
 
 Acestea sunt specificațiile pe baza cărora veți lucra. Nu trebuie să predați fișierele de colecții, ci doar migrația pe care o produc acestea.
 
-**Atenție!!** Câmpurile marcate drept condiționale pot însemna, sun normalizare, relaâii diferite.
+**Atenție!!** Câmpurile marcate drept condiționale pot însemna, sub normalizare, relaâii diferite.
 
 #### A. Colecții de Bază și Inițiative
 

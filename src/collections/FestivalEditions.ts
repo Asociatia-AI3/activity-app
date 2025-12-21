@@ -1,0 +1,30 @@
+import { CollectionConfig } from 'payload'
+
+const FestivalEditions: CollectionConfig = {
+  slug: 'festivalEditions',
+  admin: {
+    useAsTitle: 'title',
+  },
+  fields: [
+    {
+      name: 'year',
+      type: 'number',
+      required: true,
+    },
+    {
+      name: 'title',
+      type: 'text',
+      required: true,
+    },
+    {
+      name: 'theme',
+      type: 'text',
+    },
+    {
+      name: 'description',
+      type: 'richText',
+    },
+  ],
+}
+
+export default FestivalEditions

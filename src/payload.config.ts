@@ -19,6 +19,8 @@ import { UserMembership } from './collections/UserMembership'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import { en } from '@payloadcms/translations/languages/en'
+import { ro } from '@payloadcms/translations/languages/ro'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -78,6 +80,10 @@ export default buildConfig({
   plugins: [
     ...plugins,
   ],
+  i18n: {
+    fallbackLanguage: 'en',
+    supportedLanguages: { en, ro },
+  },
   secret: process.env.PAYLOAD_SECRET,
   sharp,
   typescript: {

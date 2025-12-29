@@ -1,4 +1,4 @@
-// storage-adapter-import-placeholder
+﻿// storage-adapter-import-placeholder
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
 
 import sharp from 'sharp' // sharp-import
@@ -11,6 +11,21 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
+import { Roles } from './collections/Roles'
+import { Members } from './collections/Members'
+import { Initiatives } from './collections/Initiatives'
+import { Meetings } from './collections/Meetings'
+import { Workshops } from './collections/Workshops'
+import { AntiWorkshops } from './collections/AntiWorkshops'
+import { Ninjas } from './collections/Ninjas'
+import { Mentors } from './collections/Mentors'
+import { FestivalEditions } from './collections/FestivalEditions'
+import { FestivalSections } from './collections/FestivalSections'
+import { Locations } from './collections/Locations'
+import { Guests } from './collections/Guests'
+import { Volunteers } from './collections/Volunteers'
+import { Activities } from './collections/Activities'
+import { Schedule } from './collections/Schedule'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
@@ -64,7 +79,7 @@ export default buildConfig({
       url: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [Pages, Posts, Media, Categories, Users, Roles, Members, Initiatives, Meetings, Workshops, AntiWorkshops, Ninjas, Mentors, FestivalEditions, FestivalSections, Locations, Guests, Volunteers, Activities, Schedule],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
@@ -92,3 +107,5 @@ export default buildConfig({
     tasks: [],
   },
 })
+
+

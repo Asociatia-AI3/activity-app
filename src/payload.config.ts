@@ -11,6 +11,16 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
+import { Roles } from './collections/Roles'
+import { Members } from './collections/Members'
+import { Initiatives } from './collections/Initiatives'
+import { Ninjas } from './collections/Ninjas'
+import { Mentors } from './collections/Mentors'
+import { Volunteers } from './collections/Volunteers'
+import { Guests } from './collections/Guests'
+import { Activities } from './collections/Activities'
+import { FestivalEditions } from './collections/FestivalEditions'
+import { FestivalSections } from './collections/FestivalSections'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
@@ -18,6 +28,7 @@ import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import { en } from '@payloadcms/translations/languages/en'
 import { ro } from '@payloadcms/translations/languages/ro'
+
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -66,7 +77,17 @@ export default buildConfig({
       url: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [Pages, Posts, Media, Categories, Users, Roles,
+  Members,
+  Initiatives,
+  Ninjas,
+  Mentors,
+  FestivalEditions,
+  FestivalSections,
+  Volunteers,
+  Guests,
+  Activities
+  ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [

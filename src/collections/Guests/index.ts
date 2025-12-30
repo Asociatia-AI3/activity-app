@@ -12,17 +12,38 @@ export const Guests: CollectionConfig = {
       required: true,
     },
     {
-      name: 'role',
-      type: 'text', // Ex: Actor, Director, Speaker
+      name: 'organization',
+      type: 'text',
+    },
+    {
+      name: 'edition',
+      type: 'relationship',
+      relationTo: 'festival-editions',
+      hasMany: false, 
+      required: true,
+    },
+    {
+      name: 'guestType',
+      type: 'select',
+      hasMany: true, 
+      options: [
+        { label: 'Speaker', value: 'speaker' },
+        { label: 'Workshop Holder', value: 'workshop_holder' },
+        { label: 'Exhibitor', value: 'exhibitor' },
+      ],
     },
     {
       name: 'bio',
-      type: 'textarea',
+      type: 'richText',
     },
     {
       name: 'photo',
       type: 'upload',
       relationTo: 'media',
+    },
+    {
+      name: 'website',
+      type: 'text', 
     },
   ],
 }

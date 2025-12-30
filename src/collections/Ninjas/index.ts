@@ -7,5 +7,10 @@ export const Ninjas: CollectionConfig = {
     { name: 'childName', type: 'text', required: true },
     { name: 'parentEmail', type: 'email', required: true },
     { name: 'safetyAgreement', type: 'checkbox', required: true },
+    { name: 'age', type: 'number', required: true },
+    { name: 'usefulInfo', type: 'textarea' },
+    { name: 'guardianName', type: 'text', required: true },
+    { name: 'guardianPhone', type: 'text', required: true },
+    { name: 'photoReleaseAgreement', type: 'checkbox', required: true },
   ],
 }

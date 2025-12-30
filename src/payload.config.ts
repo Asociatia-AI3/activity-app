@@ -28,6 +28,9 @@ import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import { en } from '@payloadcms/translations/languages/en'
 import { ro } from '@payloadcms/translations/languages/ro'
+import { Meetings } from './collections/Meetings'
+import { Locations } from './collections/Locations'
+import { Schedule } from './collections/Schedule'
 
 
 const filename = fileURLToPath(import.meta.url)
@@ -86,7 +89,10 @@ export default buildConfig({
   FestivalSections,
   Volunteers,
   Guests,
-  Activities
+  Activities,
+  Meetings,
+  Locations,
+  Schedule
   ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],

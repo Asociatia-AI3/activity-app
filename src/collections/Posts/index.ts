@@ -129,6 +129,16 @@ export const Posts: CollectionConfig<'posts'> = {
               hasMany: true,
               relationTo: 'categories',
             },
+            {
+              name: 'initiative',
+              type: 'relationship',
+              admin: {
+                position: 'sidebar',
+              },
+              hasMany: false, 
+              relationTo: 'initiatives', 
+              label: 'Inițiativă AI3',
+            },
           ],
           label: 'Meta',
         },

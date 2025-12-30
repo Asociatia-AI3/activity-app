@@ -12,18 +12,49 @@ export const Volunteers: CollectionConfig = {
       required: true,
     },
     {
-      name: 'email',
-      type: 'email',
-      required: true,
+      name: 'organization',
+      type: 'text',
+    },
+    {
+      name: 'birthDate',
+      type: 'date',
     },
     {
       name: 'phone',
       type: 'text',
     },
     {
-      name: 'assignedSection',
+      name: 'edition',
       type: 'relationship',
-      relationTo: 'festival-sections', // Legătura cu secțiunea din festival
+      relationTo: 'festival-editions',
+      hasMany: false, 
+    },
+    {
+      name: 'photo',
+      type: 'relationship',
+      relationTo: 'media',
+      hasMany: false,
+    },
+    {
+      name: 'agreementDocument',
+      type: 'relationship',
+      relationTo: 'media',
+      hasMany: false,
+    },
+    {
+      name: 'coordinator',
+      type: 'relationship',
+      relationTo: 'members', 
+      hasMany: false,
+    },
+    {
+      name: 'userAccount',
+      type: 'relationship',
+      relationTo: 'users',
+      hasMany: false, 
+      admin: {
+        description: 'Opțional: Contul de utilizator asociat voluntarului.',
+      },
     },
   ],
 }

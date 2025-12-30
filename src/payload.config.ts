@@ -14,6 +14,11 @@ import { MembershipVotingType } from './collections/MembershipVotingType'
 import { VotingMemberType } from './collections/VotingMemberType'
 import { MembershipFeePayments } from './collections/MembershipFeePayments'
 import { UserMembership } from './collections/UserMembership'
+import { Media } from './collections/Media'
+import { Initiatives } from './collections/Initiatives'
+import { Posts } from './collections/Posts'
+import { Categories } from './collections/Categories'
+import { Meetings } from './collections/Meetings'
 // import { Footer } from './Footer/config'
 // import { Header } from './Header/config'
 import { plugins } from './plugins'
@@ -66,20 +71,23 @@ export default buildConfig({
     push: false,
   }),
   collections: [
-    Users, 
-    Roles, 
-    UserRoles, 
-    Members, 
-    MembershipVotingType, 
-    VotingMemberType, 
-    MembershipFeePayments, 
-    UserMembership
+    Users,
+    Roles,
+    UserRoles,
+    Members,
+    MembershipVotingType,
+    VotingMemberType,
+    MembershipFeePayments,
+    UserMembership,
+    Media,
+    Initiatives,
+    Posts,
+    Categories,
+    Meetings,
   ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [],
-  plugins: [
-    ...plugins,
-  ],
+  plugins: [...plugins],
   i18n: {
     fallbackLanguage: 'en',
     supportedLanguages: { en, ro },

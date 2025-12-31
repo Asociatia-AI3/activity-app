@@ -19,6 +19,16 @@ import { Initiatives } from './collections/Initiatives'
 import { Posts } from './collections/Posts'
 import { Categories } from './collections/Categories'
 import { Meetings } from './collections/Meetings'
+import { Ninjas } from './collections/Ninjas'
+import { Mentors } from './collections/Mentors'
+import { FestivalEditions } from './collections/FestivalEditions'
+import { FestivalSections } from './collections/FestivalSections'
+import { Volunteers } from './collections/Volunteers'
+import { Locations } from './collections/Locations'
+import { LocationPhotos } from './collections/LocationPhotos'
+import { Guests } from './collections/Guests'
+import { Activities } from './collections/Activities'
+import { ActivityGuests } from './collections/ActivityGuests'
 // import { Footer } from './Footer/config'
 // import { Header } from './Header/config'
 import { plugins } from './plugins'
@@ -84,6 +94,16 @@ export default buildConfig({
     Posts,
     Categories,
     Meetings,
+    Ninjas,
+    Mentors,
+    FestivalEditions,
+    FestivalSections,
+    Volunteers,
+    Locations,
+    LocationPhotos,
+    Guests,
+    Activities,
+    ActivityGuests,
   ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [],

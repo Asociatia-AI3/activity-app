@@ -21,6 +21,14 @@ export const Users: CollectionConfig = {
       name: 'name',
       type: 'text',
     },
+
+    {
+      name: 'roles',
+      type: 'relationship',
+      relationTo: 'roles',
+      hasMany: true, 
+      label: 'Roluri Utilizator',
+    },
   ],
   timestamps: true,
 }

@@ -98,3 +98,18 @@ export default buildConfig({
     tasks: [],
   },
 })
+
+
+import Members from './collections/Members';
+import Roles from './collections/Roles';
+import Ninjas from './collections/Ninjas';
+import Activities from './collections/Activities';
+import Meetings from './collections/Meetings';
+
+export const collections = [
+  Members,
+  Roles,
+  Ninjas,
+  Activities,
+  Meetings,
+];

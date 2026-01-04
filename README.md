@@ -1,132 +1,67 @@
-# 🎓 Temă de Laborator: Baze de Date
-## Proiect: Generarea Migrației Inițiale pentru Baza de Date a Asociației AI3
+# Payload Blank Template
 
-### 1. Contextul Proiectului
-Bun venit la o provocare reală! Scopul acestui laborator este să modelăm și să implementăm structura bazei de date pentru o aplicație funcțională. "Clientul" este Asociația AI3 (Clusterul de IT&C Alba), care are nevoie de o platformă pentru a-și gestiona activitățile principale:
+This template comes configured with the bare minimum to get started on anything you need.
 
-- Activitățile Curente (întâlniri săptămânale, Coder Dojo, festivalul #difffusion).
-- Membrii și Voluntarii asociației.
-- Conținutul Public (articole de blog, pagini).
+## Quick start
 
-Baza de date pe care o veți crea va sta la baza site-urilor web ale asociației, Dojo-ului și festivalului.
+This template can be deployed directly from our Cloud hosting and it will setup MongoDB and cloud S3 object storage for media.
 
-### 2. Tehnologia: Payload CMS
-Pentru acest proiect, vom folosi Payload CMS.
+## Quick Start - local setup
 
-Ce este? Payload este un Headless CMS (Content Management System) scris în TypeScript. În loc să scriem SQL direct, definim structura datelor sub formă de "Colecții" (Collections) în codul TypeScript.
+To spin up this template locally, follow these steps:
 
-Cum funcționează? Pe baza acestor definiții (pe care le veți scrie local), Payload generează automat un fișier de migrație pentru baza de date.
+### Clone
 
-Scopul Vostru: Să scrieți definițiile colecțiilor necesare și să folosiți uneltele Payload pentru a genera fișierul de migrație inițială. Acest fișier generat este livrabilul principal.
+After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
 
-➡️ Documentație Oficială Payload: https://payloadcms.com/docs/getting-started/installation
+### Development
 
-### 3. Cerințe de Modelare (Specificații)
-Pentru a genera migrația corectă, trebuie să modelați următoarele entități. Toate denumirile (colecții și câmpuri) trebuie să fie în limba engleză.
+1. First [clone the repo](#clone) if you have not done so already
+2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `MONGODB_URL` from your Cloud project to your `.env` if you want to use S3 storage and the MongoDB database that was created for you.
 
-Acestea sunt specificațiile pe baza cărora veți lucra. Nu trebuie să predați fișierele de colecții, ci doar migrația pe care o produc acestea.
+3. `pnpm install && pnpm dev` to install dependencies and start the dev server
+4. open `http://localhost:3000` to open the app in your browser
 
-**Atenție!!** Câmpurile marcate drept condiționale pot însemna, sub normalizare, relații diferite.
+That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
 
-#### A. Colecții de Bază și Inițiative
+#### Docker (Optional)
 
-**Roles (Roluri)**
+If you prefer to use Docker for local development instead of a local MongoDB instance, the provided docker-compose.yml file can be used.
 
-Câmpuri: name (text, unic, required).
+To do so, follow these steps:
 
-(Colecția Users, deja existentă, va avea o relație many-to-many cu Roles).
+- Modify the `MONGODB_URL` in your `.env` file to `mongodb://127.0.0.1/<dbname>`
+- Modify the `docker-compose.yml` file's `MONGODB_URL` to match the above `<dbname>`
+- Run `docker-compose up` to start the database, optionally pass `-d` to run in the background.
 
-**Members (Membri AI3)**
+## How it works
 
-Un utilizator poate să fie membru, dar există și utilizatori administrativi, care nu sunt membri, dar au acces. Membrii pot să fie cu drep de vot sau aspiranți. Dintre membrii cu drept de vot putem avea și membri fondatori și membri de onoare. Este relevant deoarece membrii de onoare nu plătesc cotizație, dar pot vota.
+The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
 
-**Initiatives (Inițiative AI3)**
+### Collections
 
-Câmpuri: title (text), description (richText), image (relație cu Media), siteLink (url).
+See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
 
-(Colecția Posts, deja existentă, ar trebui modificată pentru a avea o relație many-to-one cu Initiatives).
+- #### Users (Authentication)
 
-#### B. Modulul 1: Întâlniri Săptămânale
+  Users are auth-enabled collections that have access to the admin panel.
 
-**Meetings**
+  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/main/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
 
-Câmpuri: title (text, required), date (date, required), venue (text, required), type (select: 'workshop', 'anti-workshop'), workshopTopic (select: 'Demo your stack', 'F*ck-up nights', 'Meet the business' - condițional), presenter (relație 1-la-1 cu Members - condițional), discussionAgenda (richText - condițional).
+- #### Media
 
-#### C. Modulul 2: Coder Dojo Alba Iulia
+  This is the uploads enabled collection. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
 
-**Ninjas (Copii înscriși)**
+### Docker
 
-Câmpuri: childName (text), age (number), usefulInfo (textarea), guardianName (text), guardianEmail (email), guardianPhone (text), safetyAgreement (checkbox, required), photoReleaseAgreement (checkbox, required).
+Alternatively, you can use [Docker](https://www.docker.com) to spin up this template locally. To do so, follow these steps:
 
-**Mentors**
+1. Follow [steps 1 and 2 from above](#development), the docker-compose file will automatically use the `.env` file in your project root
+1. Next run `docker-compose up`
+1. Follow [steps 4 and 5 from above](#development) to login and create your first admin user
 
-Câmpuri: name (text), bio (richText), photo (relație cu Media), userAccount (relație 1-la-1, opțională, cu Users).
+That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
 
-#### D. Modulul 3: Festivalul #difffusion
+## Questions
 
-**FestivalEditions**
-
-Câmpuri: year (number, required), title (text, required), theme (text), description (richText).
-
-**FestivalSections**
-
-Câmpuri: edition (relație many-to-one cu FestivalEditions), name (text).
-
-**Locations**
-
-Câmpuri: edition (relație many-to-one cu FestivalEditions), name (text), address (text), coordinates (point), description (richText), floorPlan (relație cu Media), capacity (number), facilities (array de tag-uri), photos (relație one-to-many cu Media), coordinator (relație 1-la-1 cu Volunteers).
-
-**Guests (Invitați Festival)**
-
-Câmpuri: edition (relație many-to-one cu FestivalEditions), name (text), organization (text), guestType (array de checkbox-uri: 'speaker', 'workshop_holder', 'exhibitor'), bio (richText), photo (relație cu Media), website (url).
-
-**Volunteers**
-
-Câmpuri: edition (relație many-to-one cu FestivalEditions), name (text), photo (relație cu Media), organization (text), birthDate (date), phone (text), agreementDocument (relație cu Media), coordinator (relație many-to-one cu Members), userAccount (relație 1-la-1, opțională, cu Users).
-
-**Activities (Activități Festival)**
-
-Câmpuri: edition (relație many-to-one cu FestivalEditions), title (text), description (richText), type (select: 'expo', 'talk', 'workshop', 'social', 'entertainment'), audience (array de checkbox-uri), guests (relație many-to-many cu Guests), section (relație many-to-one, opțională, cu FestivalSections).
-
-**Schedule (Programul Festivalului)**
-
-Câmpuri: edition (relație many-to-one cu FestivalEditions), startTime (date), endTime (date), activity (relație many-to-one cu Activities), location (relație many-to-one cu Locations).
-
-### 4. 🎯 Livrabile Obligatorii
-Pentru a finaliza tema, trebuie să pregătiți și să trimiteți un Pull Request (PR) care să conțină exact două lucruri:
-
-**_Fișierul de Migrație Inițială (Generat)_**
-
-Acesta este elementul central al temei.
-
-După ce ați definit toate colecțiile (local, în proiectul vostru), trebuie să rulați comanda de generare a migrației (ex: npm run payload migrate).
-
-Această comandă va crea un singur fișier în src/migrations/, cu un nume de forma 0001_initial.ts.
-
-Acest fișier, care conține funcțiile async function up() și async function down(), este singurul cod care trebuie inclus în PR.
-
-Pentru extra points se poate face și o migrare ce adaugă/modifică un câmp.
-
-**_Diagrama ERD (Entity-Relationship Diagram)_**
-
-O singură diagramă (imagine PNG/SVG sau PDF) care ilustrează vizual colecțiile pe care le-ați modelat și relațiile dintre ele (1-la-1, 1-la-M, M-la-M).
-
-Fișierul (ex: ERD.pdf) trebuie plasat în directorul rădăcină (root) al repository-ului.
-
-**Notă**: _Deși pentru a crea migrația trebuie să scrieți fișierele de definiție a colecțiilor (src/collections/...), includerea acestor fișiere-sursă în PR este opțională. Singurul livrabil de cod evaluat va fi fișierul de migrație generat. Câmpurile sunt orientative și subiect al modificărilor ulterioare dacă acestea sunt necesare pentru funcționalitate._
-
-**Trimiterea Temei:**
-
-- Faceți un "fork" la repository-ul asociației.
-- Creați un "branch" nou (ex. feature/db-migration-numele_vostru).
-- Adăugați fișierul de migrație generat în src/migrations/ și diagrama ERD în directorul rădăcină.
-- Trimiteți un Pull Request către repository-ul oficial: https://github.com/Asociatia-AI3/activity-app
-
-### 5. 💡 Sfaturi și Evaluare
-**Citiți documentația Payload!** Este esențial să înțelegeți cum se definesc colecțiile pentru a putea genera migrația.
-
-**Atenție la proces**: Sarcina voastră este să definiți colecțiile în TypeScript (local) și să generați fișierul de migrație. Nu trebuie să scrieți manual funcțiile up/down, ci să vă asigurați că generarea lor funcționează corect și reflectă cerințele.
-
-**Gândiți relațiile**: Stabiliți corect cardinalitatea. Când este o relație hasMany (array de ID-uri) și când este one-to-one sau many-to-one (un singur ID)? O diagramă ERD corectă depinde de acest pas.
-
-Succes!
+If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).

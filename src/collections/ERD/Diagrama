@@ -1,0 +1,23 @@
+erDiagram
+    USERS ||--o{ USERS_ROLES : has
+    ROLES ||--o{ USERS_ROLES : assigned
+
+    USERS ||--|| MEMBERS : linked
+    USERS ||--|| MENTORS : account
+    USERS ||--|| VOLUNTEERS : account
+
+    MEMBERS ||--o{ VOLUNTEERS : coordinates
+    MEMBERS ||--o{ MEETINGS : presents
+
+    FESTIVAL_EDITIONS ||--o{ FESTIVAL_SECTIONS : has
+    FESTIVAL_EDITIONS ||--o{ LOCATIONS : hosts
+    FESTIVAL_EDITIONS ||--o{ GUESTS : invites
+    FESTIVAL_EDITIONS ||--o{ VOLUNTEERS : includes
+    FESTIVAL_EDITIONS ||--o{ ACTIVITIES : contains
+    FESTIVAL_EDITIONS ||--o{ SCHEDULE : plans
+
+    ACTIVITIES ||--o{ ACTIVITIES_GUESTS : includes
+    GUESTS ||--o{ ACTIVITIES_GUESTS : participates
+
+    ACTIVITIES ||--o{ SCHEDULE : scheduled
+    LOCATIONS ||--o{ SCHEDULE : used

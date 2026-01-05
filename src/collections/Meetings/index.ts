@@ -1,0 +1,29 @@
+import { CollectionConfig, CollectionSlug } from 'payload';
+
+export const Meetings: CollectionConfig = {
+  slug: 'meetings',
+  admin: { useAsTitle: 'title' },
+  fields: [
+    { name: 'title', type: 'text', required: true },
+    { name: 'date', type: 'date', required: true },
+    { name: 'venue', type: 'text', required: true },
+    { name: 'type', type: 'select', options: ['workshop', 'anti-workshop'] },
+    {
+      name: 'workshopTopic',
+      type: 'select',
+      options: ['Demo your stack', 'F*ck-up nights', 'Meet the business'],
+      admin: { condition: (data) => data.type === 'workshop' },
+    },
+    {
+      name: 'presenter',
+      type: 'relationship',
+      relationTo: 'members' as CollectionSlug,
+      admin: { condition: (data) => data.type === 'workshop' },
+    },
+    {
+      name: 'discussionAgenda',
+      type: 'richText',
+      admin: { condition: (data) => data.type === 'workshop' },
+    },
+  ],
+};

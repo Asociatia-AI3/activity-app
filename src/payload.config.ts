@@ -1,10 +1,8 @@
-// storage-adapter-import-placeholder
-import { sqliteAdapter } from '@payloadcms/db-sqlite'
-
-import sharp from 'sharp' // sharp-import
 import path from 'path'
-import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
+import sharp from 'sharp'
+import { buildConfig, PayloadRequest } from 'payload'
+import { sqliteAdapter } from '@payloadcms/db-sqlite'
 
 import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
@@ -19,17 +17,28 @@ import { getServerSideURL } from './utilities/getURL'
 import { en } from '@payloadcms/translations/languages/en'
 import { ro } from '@payloadcms/translations/languages/ro'
 
+// Import colecții noi
+import { Roles } from './collections/roles'
+import { Members } from './collections/members'
+import { Initiatives } from './collections/initiatives'
+import { Meetings } from './collections/meetings'
+import { Ninjas } from './collections/ninjas'
+import { Mentors } from './collections/mentors'
+import { FestivalEditions } from './collections/festival-editions'
+import { FestivalSections } from './collections/festival-sections'
+import { Locations } from './collections/locations'
+import { Guests } from './collections/guests'
+import { Volunteers } from './collections/volunteers'
+import { Activities } from './collections/activities'
+import { Schedule } from './collections/schedule'
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
   admin: {
     components: {
-      // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below.
       beforeLogin: ['@/components/BeforeLogin'],
-      // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below.
       beforeDashboard: ['@/components/BeforeDashboard'],
     },
     importMap: {
@@ -38,59 +47,67 @@ export default buildConfig({
     user: Users.slug,
     livePreview: {
       breakpoints: [
-        {
-          label: 'Mobile',
-          name: 'mobile',
-          width: 375,
-          height: 667,
-        },
-        {
-          label: 'Tablet',
-          name: 'tablet',
-          width: 768,
-          height: 1024,
-        },
-        {
-          label: 'Desktop',
-          name: 'desktop',
-          width: 1440,
-          height: 900,
-        },
+        { label: 'Mobile', name: 'mobile', width: 375, height: 667 },
+        { label: 'Tablet', name: 'tablet', width: 768, height: 1024 },
+        { label: 'Desktop', name: 'desktop', width: 1440, height: 900 },
       ],
     },
   },
-  // This config helps us configure global or default features that the other editors can inherit
+
   editor: defaultLexical,
+
   db: sqliteAdapter({
     client: {
       url: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
-  cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
-  plugins: [
-    ...plugins,
-    // storage-adapter-placeholder
+
+  collections: [
+    Pages,
+    Posts,
+    Media,
+    Categories,
+    Users,
+
+    Roles,
+    Members,
+    Initiatives,
+    Meetings,
+    Ninjas,
+    Mentors,
+    FestivalEditions,
+    FestivalSections,
+    Locations,
+    Guests,
+    Volunteers,
+    Activities,
+    Schedule,
   ],
+
+  cors: [getServerSideURL()].filter(Boolean),
+
+  globals: [Header, Footer],
+
+  plugins: [...plugins],
+
   i18n: {
     fallbackLanguage: 'en',
     supportedLanguages: { en, ro },
   },
+
   secret: process.env.PAYLOAD_SECRET,
+
   sharp,
+
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
+
   jobs: {
     access: {
       run: ({ req }: { req: PayloadRequest }): boolean => {
-        // Allow logged in users to execute this endpoint (default)
         if (req.user) return true
 
-        // If there is no logged in user, then check
-        // for the Vercel Cron secret to be present as an
-        // Authorization header:
         const authHeader = req.headers.get('authorization')
         return authHeader === `Bearer ${process.env.CRON_SECRET}`
       },

@@ -1,99 +1,69 @@
-// storage-adapter-import-placeholder
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
-
-import sharp from 'sharp' // sharp-import
+import sharp from 'sharp'
 import path from 'path'
-import { buildConfig, PayloadRequest } from 'payload'
-import { fileURLToPath } from 'url'
+import { buildConfig } from 'payload'
+import { fileURLToPath, pathToFileURL } from 'url'
 
-import { Categories } from './collections/Categories'
-import { Media } from './collections/Media'
-import { Pages } from './collections/Pages'
-import { Posts } from './collections/Posts'
-import { Users } from './collections/Users'
-import { Footer } from './Footer/config'
-import { Header } from './Header/config'
-import { plugins } from './plugins'
-import { defaultLexical } from '@/fields/defaultLexical'
-import { getServerSideURL } from './utilities/getURL'
-import { en } from '@payloadcms/translations/languages/en'
-import { ro } from '@payloadcms/translations/languages/ro'
+import Users from './collections/Users'
+import Roles from './collections/Roles'
+import Members from './collections/Members'
+import Media from './collections/Media'
+import Initiatives from './collections/Initiatives'
+import Posts from './collections/Posts'
+import Meetings from './collections/Meetings'
+import Ninjas from './collections/Ninjas'
+import Mentors from './collections/Mentors'
+import FestivalEditions from './collections/FestivalEditions'
+import FestivalSections from './collections/FestivalSections'
+import Volunteers from './collections/Volunteers'
+import Locations from './collections/Locations'
+import Guests from './collections/Guests'
+import Activities from './collections/Activities'
+import Schedule from './collections/Schedule'
 
+// ES module fix
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+// transformăm path Windows în file:// URL
+const dbPath = path.resolve(dirname, '../payload.db')
+const dbURL = pathToFileURL(dbPath).href
+
+
 export default buildConfig({
   admin: {
-    components: {
-      // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below.
-      beforeLogin: ['@/components/BeforeLogin'],
-      // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below.
-      beforeDashboard: ['@/components/BeforeDashboard'],
-    },
-    importMap: {
-      baseDir: path.resolve(dirname),
-    },
     user: Users.slug,
-    livePreview: {
-      breakpoints: [
-        {
-          label: 'Mobile',
-          name: 'mobile',
-          width: 375,
-          height: 667,
-        },
-        {
-          label: 'Tablet',
-          name: 'tablet',
-          width: 768,
-          height: 1024,
-        },
-        {
-          label: 'Desktop',
-          name: 'desktop',
-          width: 1440,
-          height: 900,
-        },
-      ],
-    },
   },
-  // This config helps us configure global or default features that the other editors can inherit
-  editor: defaultLexical,
   db: sqliteAdapter({
     client: {
-      url: process.env.DATABASE_URI || '',
+      url: dbURL, // folosește URL-ul file://
     },
+    push: false,
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
-  cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
-  plugins: [
-    ...plugins,
-    // storage-adapter-placeholder
+  collections: [
+    Users,
+    Roles,
+    Members,
+    Media,
+    Initiatives,
+    Posts,
+    Meetings,
+    Ninjas,
+    Mentors,
+    FestivalEditions,
+    FestivalSections,
+    Volunteers,
+    Locations,
+    Guests,
+    Activities,
+    Schedule,
   ],
-  i18n: {
-    fallbackLanguage: 'en',
-    supportedLanguages: { en, ro },
-  },
-  secret: process.env.PAYLOAD_SECRET,
-  sharp,
+  plugins: [], // dezactivăm plugin-urile ca să nu dea InvalidFieldRelationship
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  jobs: {
-    access: {
-      run: ({ req }: { req: PayloadRequest }): boolean => {
-        if (req.user) return true
-
-        // If there is no logged in user, then check
-        // for the Vercel Cron secret to be present as an
-        // Authorization header:
-        const authHeader = req.headers.get('authorization')
-        return authHeader === `Bearer ${process.env.CRON_SECRET}`
-      },
-    },
-    tasks: [],
-  },
+  sharp,
+  secret: '3110', // temporar pentru migrare
 })
+
+

@@ -10,7 +10,20 @@ import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
+import { Initiatives } from './collections/Initiatives'
 import { Users } from './collections/Users'
+import { Members } from './collections/Members'
+import { Guests } from './collections/Guests'
+import { Activities } from './collections/Activities'
+import { Roles } from './collections/Roles'
+import { Mentors } from './collections/Mentors'
+import { Meetings } from './collections/Meetings'
+import { Schedule } from './collections/Schedule'
+import { Locations } from './collections/Locations'
+import { Volunteers } from './collections/Volunteers'
+import { FestivalEditions } from './collections/FestivalEditions'
+import { FestivalSelections } from './collections/FestivalSelections'
+import { Ninjas } from './collections/Ninjas'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
@@ -66,7 +79,8 @@ export default buildConfig({
       url: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [Pages, Posts, Media, Categories, Users, Roles, Members, Initiatives, Meetings, 
+    Ninjas, Mentors, FestivalEditions, FestivalSelections, Locations, Guests, Volunteers, Activities, Schedule],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [

@@ -11,11 +11,24 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
+import { Members } from './collections/Members'
+import { Meetings } from './collections/Meetings'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import { Roles } from './collections/Roles'
+import { Initiatives } from './collections/Initiatives'
+import { Ninjas } from './collections/Ninjas'
+import { Mentors } from './collections/Mentors'
+import { FestivalEditions } from './collections/FestivalEditions'
+import { FestivalSections } from './collections/FestivalSelections'
+import { Locations } from './collections/Locations'
+import { Guests } from './collections/Guests'
+import { Volunteers } from './collections/Volunteers'
+import { Activities } from './collections/Activities'
+import { Schedules } from './collections/Schedule'
 import { en } from '@payloadcms/translations/languages/en'
 import { ro } from '@payloadcms/translations/languages/ro'
 
@@ -66,7 +79,26 @@ export default buildConfig({
       url: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [
+    Pages, 
+    Posts, 
+    Media, 
+    Categories, 
+    Users, 
+    Roles, 
+    Initiatives, 
+    Members, 
+    Meetings,
+    Ninjas,
+    Mentors,
+    FestivalEditions,
+    FestivalSections,
+    Locations,
+    Guests,
+    Volunteers,
+    Activities,
+    Schedules
+  ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [

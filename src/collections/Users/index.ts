@@ -1,7 +1,6 @@
+@@ -1,26 +1,35 @@
 import type { CollectionConfig } from 'payload'
-
 import { authenticated } from '../../access/authenticated'
-
 export const Users: CollectionConfig = {
   slug: 'users',
   access: {
@@ -20,6 +19,15 @@ export const Users: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
+    },
+    {
+      name: 'roles',
+      type: 'relationship',
+      relationTo: 'roles',
+      hasMany: true,
+      admin: {
+        position: 'sidebar',
+      },
     },
   ],
   timestamps: true,

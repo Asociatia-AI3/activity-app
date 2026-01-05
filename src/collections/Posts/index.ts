@@ -1,5 +1,4 @@
 import type { CollectionConfig } from 'payload'
-
 import {
   BlocksFeature,
   FixedToolbarFeature,
@@ -8,7 +7,6 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
-
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { Banner } from '../../blocks/Banner/config'
@@ -17,7 +15,6 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
-
 import {
   MetaDescriptionField,
   MetaImageField,
@@ -26,7 +23,6 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 import { slugField } from 'payload'
-
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
   access: {
@@ -147,12 +143,10 @@ export const Posts: CollectionConfig<'posts'> = {
             MetaImageField({
               relationTo: 'media',
             }),
-
             MetaDescriptionField({}),
             PreviewField({
               // if the `generateUrl` function is configured
               hasGenerateFn: true,
-
               // field paths to match the target field for data
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
@@ -211,6 +205,12 @@ export const Posts: CollectionConfig<'posts'> = {
         {
           name: 'name',
           type: 'text',
+        },
+        {
+          name: 'initiative',
+          type: 'relationship',
+          relationTo: 'initiatives',
+          required: false
         },
       ],
     },

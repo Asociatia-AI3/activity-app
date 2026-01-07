@@ -6,8 +6,8 @@ import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
-import { Categories } from './collections/Categories'
-import { Media } from './collections/Media'
+import { Categories } from './collections/Categories/Categories'
+import { Media } from './collections/Media/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
@@ -18,6 +18,19 @@ import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import { en } from '@payloadcms/translations/languages/en'
 import { ro } from '@payloadcms/translations/languages/ro'
+
+import { Roles } from './collections/Roles/Roles'
+import { Members } from './collections/Members/Members'
+import { Initiatives } from './collections/Initiatives/Initiatives'
+import { Meetings } from './collections/Meetings/Meetings'
+import { Ninjas } from './collections/Ninjas/Ninjas'
+import { Mentors } from './collections/Mentors/Mentors'
+import { FestivalEditions } from './collections/Editions'
+import { Locations } from './collections/Locations/Locations'
+import { Guests } from './collections/Guests/Guests'
+import { Volunteers } from './collections/Volunteers/Volunteers'
+import { Activities } from './collections/Activities/Activities'
+import { Schedules } from './collections/Schedule/Schedule'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -66,7 +79,25 @@ export default buildConfig({
       url: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [
+    Pages,
+    Posts,
+    Media,
+    Categories,
+    Users,
+    Roles,
+    Members,
+    Initiatives,
+    Meetings,
+    Ninjas,
+    Mentors,
+    FestivalEditions,
+    Locations,
+    Guests,
+    Volunteers,
+    Activities,
+    Schedules,
+  ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [

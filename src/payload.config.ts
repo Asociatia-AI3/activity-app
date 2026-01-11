@@ -1,7 +1,7 @@
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import sharp from 'sharp'
 import path from 'path'
-import { buildConfig } from 'payload'
+import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath, pathToFileURL } from 'url'
 
 import Users from './collections/Users'
@@ -21,25 +21,36 @@ import Guests from './collections/Guests'
 import Activities from './collections/Activities'
 import Schedule from './collections/Schedule'
 
-// ES module fix
+import { defaultLexical } from '@/fields/defaultLexical'
+import { getServerSideURL } from './utilities/getURL'
+import { en } from '@payloadcms/translations/languages/en'
+import { ro } from '@payloadcms/translations/languages/ro'
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-// transformăm path Windows în file:// URL
 const dbPath = path.resolve(dirname, '../payload.db')
 const dbURL = pathToFileURL(dbPath).href
 
-
 export default buildConfig({
+  secret: process.env.PAYLOAD_SECRET || 'local-secret',
+
   admin: {
     user: Users.slug,
+    importMap: {
+      baseDir: path.resolve(dirname),
+    },
   },
+
+  editor: defaultLexical,
+
   db: sqliteAdapter({
     client: {
-      url: dbURL, // folosește URL-ul file://
+      url: dbURL,
     },
     push: false,
   }),
+
   collections: [
     Users,
     Roles,
@@ -58,12 +69,35 @@ export default buildConfig({
     Activities,
     Schedule,
   ],
-  plugins: [], // dezactivăm plugin-urile ca să nu dea InvalidFieldRelationship
+
+  globals: [],
+
+  plugins: [],
+
+  cors: [getServerSideURL()].filter(Boolean),
+
+  i18n: {
+    fallbackLanguage: 'en',
+    supportedLanguages: { en, ro },
+  },
+
+  sharp,
+
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  sharp,
-  secret: '3110', // temporar pentru migrare
+
+  jobs: {
+    access: {
+      run: ({ req }: { req: PayloadRequest }): boolean => {
+        if (req.user) return true
+        const authHeader = req.headers.get('authorization')
+        return authHeader === `Bearer ${process.env.CRON_SECRET}`
+      },
+    },
+    tasks: [],
+  },
 })
+
 
 

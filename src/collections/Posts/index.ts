@@ -212,6 +212,12 @@ export const Posts: CollectionConfig<'posts'> = {
           name: 'name',
           type: 'text',
         },
+        {
+          name: 'initiative',
+          type: 'relationship',
+          relationTo: 'initiatives',
+          required: false
+        },
       ],
     },
     slugField(),

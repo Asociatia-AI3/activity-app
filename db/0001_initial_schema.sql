@@ -1,5 +1,9 @@
 PRAGMA foreign_keys = ON;
 
+-- Date/datetime convention: store as TEXT (ISO 8601). Where both date and time
+-- are needed use a single datetime field; extract in queries via date(...) and time(...).
+-- Date-only fields (e.g. birth_date, joined_at): same TEXT, store date or datetime as needed.
+
 BEGIN;
 
 -- ---------------------------------------------------------------------------
@@ -123,9 +127,9 @@ END;
 -- Meetups
 -- ---------------------------------------------------------------------------
 
+-- Datetime: single TEXT (ISO 8601); use date(starts_at) / time(starts_at) in queries.
 CREATE TABLE meetups (
   id INTEGER PRIMARY KEY,
-  meetup_date TEXT NOT NULL,
   starts_at TEXT NOT NULL,
   location TEXT NOT NULL,
   created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -223,22 +227,22 @@ CREATE TABLE dojo_tutors (
   FOREIGN KEY (profile_id) REFERENCES profiles(id) ON DELETE RESTRICT
 );
 
+-- Ninjas = children participating in dojo; they do not sign documents (minors). Tutors (responsible adults) sign agreements.
+-- Ninja links to profile (no duplicated profile data); only ninja-specific info is useful_info.
 CREATE TABLE dojo_ninjas (
   id INTEGER PRIMARY KEY,
-  caregiver_id INTEGER NOT NULL,
-  child_name TEXT NOT NULL,
-  age INTEGER,
+  profile_id INTEGER NOT NULL,
+  tutor_id INTEGER NOT NULL,
   useful_info TEXT,
-  safety_agreement_signed INTEGER NOT NULL DEFAULT 0 CHECK (safety_agreement_signed IN (0, 1)),
-  photo_release_signed INTEGER NOT NULL DEFAULT 0 CHECK (photo_release_signed IN (0, 1)),
   created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (caregiver_id) REFERENCES dojo_tutors(id) ON DELETE RESTRICT
+  FOREIGN KEY (profile_id) REFERENCES profiles(id) ON DELETE RESTRICT,
+  FOREIGN KEY (tutor_id) REFERENCES dojo_tutors(id) ON DELETE RESTRICT
 );
 
+-- Datetime: single TEXT (ISO 8601); use date(starts_at) / time(starts_at) in queries.
 CREATE TABLE dojo_sessions (
   id INTEGER PRIMARY KEY,
-  session_date TEXT NOT NULL,
   starts_at TEXT NOT NULL,
   location TEXT NOT NULL,
   theme TEXT,
@@ -281,6 +285,7 @@ CREATE TABLE tutor_agreement_signatures (
 -- General Assembly (extension)
 -- ---------------------------------------------------------------------------
 
+-- announced_at, held_at: single datetime (TEXT); use date()/time() in queries if needed.
 CREATE TABLE general_assemblies (
   id INTEGER PRIMARY KEY,
   year INTEGER NOT NULL,
@@ -313,11 +318,12 @@ CREATE INDEX idx_profiles_email ON profiles(email);
 CREATE INDEX idx_members_profile_id ON members(profile_id);
 CREATE INDEX idx_membership_fees_member_id ON membership_fees(member_id);
 CREATE INDEX idx_membership_fees_year ON membership_fees(year);
-CREATE INDEX idx_meetups_date ON meetups(meetup_date);
+CREATE INDEX idx_meetups_starts_at ON meetups(starts_at);
 CREATE INDEX idx_meetup_workshops_presenter_id ON meetup_workshops(presenter_id);
-CREATE INDEX idx_dojo_sessions_session_date ON dojo_sessions(session_date);
+CREATE INDEX idx_dojo_sessions_starts_at ON dojo_sessions(starts_at);
 CREATE INDEX idx_dojo_sessions_mentor_id ON dojo_sessions(mentor_id);
-CREATE INDEX idx_dojo_ninjas_caregiver_id ON dojo_ninjas(caregiver_id);
+CREATE INDEX idx_dojo_ninjas_tutor_id ON dojo_ninjas(tutor_id);
+CREATE INDEX idx_dojo_ninjas_profile_id ON dojo_ninjas(profile_id);
 CREATE INDEX idx_user_roles_role_id ON user_roles(role_id);
 
 COMMIT;

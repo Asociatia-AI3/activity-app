@@ -189,7 +189,7 @@ export class FestivalService {
     return this.db.getDb().prepare('SELECT * FROM festival_sections WHERE id = ?').get(id) as any;
   }
 
-  createActivity(data: any) {
+  createActivity(data: any): number {
     const gid = data.guest_id != null && data.guest_id !== ''
       ? parseInt(String(data.guest_id), 10)
       : null;
@@ -204,6 +204,7 @@ export class FestivalService {
       data.audience,
       Number.isFinite(gid as number) ? gid : null,
     );
+    return (this.db.getDb().prepare('SELECT last_insert_rowid() AS id').get() as any).id;
   }
 
   updateActivity(id: number, data: any) {

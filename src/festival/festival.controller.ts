@@ -863,10 +863,11 @@ export class FestivalController {
     const edition = this.festivalService.findEditionById(eid);
     return this.ctx(req, {
       edition,
-      festivalSubnav: 'program',
+      festivalSubsection: 'overview',
       program: { presenter_ids: [] as number[] },
+      activity: {} as any,
+      sections: this.festivalService.getSections(eid),
       locations: this.festivalService.getLocations(eid),
-      activities: this.festivalService.getAllActivitiesForEdition(eid),
       guests: this.festivalService.getGuests(eid),
       isProgramEdit: false,
       cancelHref: `/admin/festival/editions/${eid}/program`,
@@ -875,14 +876,30 @@ export class FestivalController {
 
   @Post('editions/:id/program')
   createProgramEntry(@Param('id') id: string, @Body() body: any, @Req() req: any, @Res() res: any) {
+    const eid = parseInt(id, 10);
     try {
+      const sectionId = parseInt(body.section_id, 10);
+      if (!Number.isFinite(sectionId)) throw new Error('Section is required.');
+      const guestId = this.resolveGuestIdForActivity(body, eid);
+      const activityId = this.festivalService.createActivity({
+        section_id: sectionId,
+        title: body.title,
+        description: body.description,
+        activity_type: body.activity_type,
+        audience: body.audience,
+        guest_id: guestId,
+      });
+      const presenterIds = this.parsePresenterIds(body);
+      if (guestId != null && !presenterIds.includes(guestId)) {
+        presenterIds.push(guestId);
+      }
       this.festivalService.createProgramEntry({
-        edition_id: parseInt(id, 10),
+        edition_id: eid,
         location_id: parseInt(body.location_id, 10),
-        activity_id: parseInt(body.activity_id, 10),
+        activity_id: activityId,
         starts_at: body.starts_at,
         ends_at: body.ends_at || null,
-        presenter_ids: this.parsePresenterIds(body),
+        presenter_ids: presenterIds,
       });
       req.flash('success', 'Program entry created.');
     } catch (e: any) {
@@ -901,8 +918,9 @@ export class FestivalController {
       return this.ctx(req, {
         edition: null,
         program: null,
+        activity: null,
+        sections: [],
         locations: [],
-        activities: [],
         guests: [],
         isProgramEdit: true,
       });
@@ -910,6 +928,8 @@ export class FestivalController {
     const eid = row.edition_id;
     const edition = this.festivalService.findEditionById(eid);
     const presenterIds = this.festivalService.getProgramPresenterGuestIds(pid);
+    const activity = this.festivalService.findActivityById(row.activity_id) as any;
+    const location = this.festivalService.findLocationById(row.location_id) as any;
     const program = {
       ...row,
       id: row.id,
@@ -919,10 +939,11 @@ export class FestivalController {
     };
     return this.ctx(req, {
       edition,
-      festivalSubnav: 'program',
+      festivalSubsection: 'overview',
       program,
-      locations: this.festivalService.getLocations(eid),
-      activities: this.festivalService.getAllActivitiesForEdition(eid),
+      activity: activity || {},
+      location,
+      sections: this.festivalService.getSections(eid),
       guests: this.festivalService.getGuests(eid),
       isProgramEdit: true,
       cancelHref: `/admin/festival/editions/${eid}/program`,
@@ -934,12 +955,28 @@ export class FestivalController {
     const prog = this.festivalService.findProgramEntryById(parseInt(id, 10));
     try {
       if (!prog) throw new Error('Program entry not found.');
+      let newGuestId: number | null = null;
+      if (prog.activity_id) {
+        newGuestId = this.resolveGuestIdForActivity(body, prog.edition_id);
+        this.festivalService.updateActivity(prog.activity_id, {
+          section_id: body.section_id,
+          title: body.title,
+          description: body.description,
+          activity_type: body.activity_type,
+          audience: body.audience,
+          guest_id: newGuestId,
+        });
+      }
+      const presenterIds = this.parsePresenterIds(body);
+      if (newGuestId != null && !presenterIds.includes(newGuestId)) {
+        presenterIds.push(newGuestId);
+      }
       this.festivalService.updateProgramEntry(parseInt(id, 10), {
-        location_id: parseInt(body.location_id, 10),
-        activity_id: parseInt(body.activity_id, 10),
+        location_id: prog.location_id,
+        activity_id: prog.activity_id,
         starts_at: body.starts_at,
         ends_at: body.ends_at || null,
-        presenter_ids: this.parsePresenterIds(body),
+        presenter_ids: presenterIds,
       });
       req.flash('success', 'Program entry updated.');
     } catch (e: any) {

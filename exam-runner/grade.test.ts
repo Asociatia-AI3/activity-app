@@ -184,6 +184,65 @@ afterAll(() => {
 // Test suite
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Similarity detection helpers
+// ---------------------------------------------------------------------------
+
+const SIMILARITY_THRESHOLD = 0.85;
+
+function tokenize(sql: string): string[] {
+  return sql
+    .replace(/--.*$/gm, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/\b\d+\b/g, '?')
+    .replace(/'[^']*'/g, "'?'")
+    .toLowerCase()
+    // Strip table aliases: `t.col` / `alias.col` -> `col`
+    .replace(/\b[a-z_]\w*\./g, '')
+    // Strip AS aliases: `AS something` -> ``
+    .replace(/\bas\s+\w+/g, '')
+    .split(/[\s,;()]+/)
+    .filter((t) => t.length > 0);
+}
+
+function jaccard(a: string[], b: string[]): number {
+  const setA = new Set(a);
+  const setB = new Set(b);
+  const intersection = new Set([...setA].filter((x) => setB.has(x)));
+  const union = new Set([...setA, ...setB]);
+  if (union.size === 0) return 0;
+  return intersection.size / union.size;
+}
+
+/**
+ * Bigram-based similarity — more sensitive to structural copying than
+ * plain token Jaccard because it preserves token ordering.
+ */
+function bigramSimilarity(a: string[], b: string[]): number {
+  if (a.length < 2 || b.length < 2) return jaccard(a, b);
+  const bg = (tokens: string[]) => {
+    const s = new Set<string>();
+    for (let i = 0; i < tokens.length - 1; i++) s.add(`${tokens[i]} ${tokens[i + 1]}`);
+    return s;
+  };
+  const bgA = bg(a);
+  const bgB = bg(b);
+  const intersection = new Set([...bgA].filter((x) => bgB.has(x)));
+  const union = new Set([...bgA, ...bgB]);
+  if (union.size === 0) return 0;
+  return intersection.size / union.size;
+}
+
+function readStudentFile(studentDir: string, filename: string): string | null {
+  const p = join(studentDir, filename);
+  if (!existsSync(p)) return null;
+  return readFileSync(p, 'utf-8');
+}
+
+// ---------------------------------------------------------------------------
+// Test suite
+// ---------------------------------------------------------------------------
+
 const expected = loadExpected();
 const students = getStudentDirs();
 
@@ -310,4 +369,45 @@ if (students.length === 0) {
       recordScore(studentId, qi, passed);
     });
   });
+
+  // -------------------------------------------------------------------------
+  // Similarity detection — flags suspiciously similar submissions
+  // -------------------------------------------------------------------------
+
+  if (students.length >= 2) {
+    describe(`[${GRUPA}] Similarity check`, () => {
+      const filesToCheck = ['date.sql', 'interogari.sql'] as const;
+
+      const pairs: [string, string][] = [];
+      for (let i = 0; i < students.length; i++) {
+        for (let j = i + 1; j < students.length; j++) {
+          pairs.push([students[i], students[j]]);
+        }
+      }
+
+      for (const file of filesToCheck) {
+        test.each(pairs)(`${file}: %s vs %s`, (a, b) => {
+          const contentA = readStudentFile(join(EXAM_DIR, a), file);
+          const contentB = readStudentFile(join(EXAM_DIR, b), file);
+
+          if (!contentA || !contentB) return;
+
+          const tokensA = tokenize(contentA);
+          const tokensB = tokenize(contentB);
+
+          const jaccardScore = jaccard(tokensA, tokensB);
+          const bigramScore = bigramSimilarity(tokensA, tokensB);
+          const score = Math.max(jaccardScore, bigramScore);
+
+          if (score >= SIMILARITY_THRESHOLD) {
+            expect(`similarity ${(score * 100).toFixed(0)}%`).toBe(
+              `below ${(SIMILARITY_THRESHOLD * 100).toFixed(0)}% — ` +
+              `${a} and ${b} have suspiciously similar ${file} ` +
+              `(jaccard: ${(jaccardScore * 100).toFixed(0)}%, bigram: ${(bigramScore * 100).toFixed(0)}%)`,
+            );
+          }
+        });
+      }
+    });
+  }
 }

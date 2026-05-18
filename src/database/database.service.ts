@@ -1,8 +1,9 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import Database from 'better-sqlite3';
-import { readFileSync, existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import * as bcrypt from 'bcrypt';
+import { applySchemaMigrations } from './apply-schema-migrations';
 
 @Injectable()
 export class DatabaseService implements OnModuleInit, OnModuleDestroy {
@@ -33,9 +34,6 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
   }
 
   private runMigrations() {
-    const migrationsDir = join(process.cwd(), 'db');
-    const files = ['0001_initial_schema.sql', '0002_festival_difffusion.sql'];
-
     const tableExists = this.db
       .prepare(
         `SELECT COUNT(*) AS cnt FROM sqlite_master WHERE type='table' AND name='profiles'`,
@@ -47,17 +45,7 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
       return;
     }
 
-    for (const file of files) {
-      const filePath = join(migrationsDir, file);
-      if (!existsSync(filePath)) continue;
-
-      let sql = readFileSync(filePath, 'utf-8');
-      sql = sql.replace(/PRAGMA foreign_keys\s*=\s*ON;\s*/g, '');
-      sql = sql.replace(/BEGIN;\s*/g, '');
-      sql = sql.replace(/COMMIT;\s*/g, '');
-
-      this.db.exec(sql);
-    }
+    applySchemaMigrations(this.db, join(process.cwd(), 'db'));
   }
 
   private runIncrementalMigrations() {
